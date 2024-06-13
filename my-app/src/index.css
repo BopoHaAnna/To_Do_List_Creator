@@ -1,0 +1,66 @@
+body {
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+	background-image: url('https://images.unsplash.com/photo-1495195129352-aeb325a55b65?q=80&w=2676&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+	background-size: cover; /* Увеличивает изображение, чтобы оно заполнило весь экран */
+	background-position: center; /* Центрирует изображение */
+	background-repeat: no-repeat; /* Запрещает повторение изображения */
+	font-family: 'Arial', sans-serif;
+	display: flex;
+	justify-content: center; /* Центрирует по горизонтали */
+	align-items: flex-start; /* Центрирует по вертикали */
+	padding-top: 50px; /* Отступ сверху */
+}
+
+.todo-container {
+	position: relative; /* Для псевдоэлементов */
+	background-color: #ffffff;
+	width: 500px;
+	padding: 20px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	border-radius: 5px;
+}
+
+.todo-container::before,
+.todo-container::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border: 2px solid #000000; /* Черная рамка */
+	border-radius: 5px; /* Закругленные углы */
+	pointer-events: none; /* Чтобы не мешало взаимодействию с содержимым */
+}
+
+.todo-container::after {
+	top: -4px;
+	left: -4px;
+	right: -4px;
+	bottom: -4px;
+	border: 2px solid #000000; /* Вторая черная рамка */
+}
+
+.todo-title {
+	font-family: Lobster;
+	text-align: center;
+	font-size: 48px;
+	margin: 0 0 20px;
+}
+
+.todo-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.todo-list li {
+	background: #f9f9f9;
+	border: 1px solid #ccc;
+	padding: 10px;
+	margin-bottom: 10px;
+	border-radius: 3px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
