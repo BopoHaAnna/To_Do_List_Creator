@@ -1,0 +1,140 @@
+/*app.module.css*/
+
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+
+.todoContainer {
+	position: relative; /* Для псевдоэлементов */
+	background-color: #ffffff;
+	width: 500px;
+	padding: 20px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	border-radius: 5px;
+}
+
+.todoContainer::before,
+.todoContainer::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border: 2px solid #000000; /* Черная рамка */
+	border-radius: 5px; /* Закругленные углы */
+	pointer-events: none; /* Чтобы не мешало взаимодействию с содержимым */
+}
+
+.todoContainer::after {
+	top: -4px;
+	left: -4px;
+	right: -4px;
+	bottom: -4px;
+	border: 2px solid #000000; /* Вторая черная рамка */
+}
+
+.todoTitle {
+	font-family: 'Indie Flower';
+	text-align: center;
+	font-size: 48px;
+	margin: 0 0 20px;
+}
+
+.todoList {
+	list-style: none; /* убирает форматирование списка*/
+	padding: 0;
+	margin: 0;
+}
+
+.todoList li {
+	background: #f9f9f9;
+	padding: 10px;
+	margin-bottom: 10px;
+	border-radius: 3px;
+	border-bottom: 2px dotted grey; /* Заменяем рамку на точечное подчеркивание */
+}
+
+.inputContainer {
+	width: 500px;
+	display: flex; /* Используем flexbox для удобного расположения элементов */
+	justify-content: space-between; /* Распределяем элементы по ширине */
+	align-items: center; /* Выравниваем элементы по вертикали */
+	margin-top: 20px; /* Отступ сверху */
+	margin-bottom: 20px;
+}
+
+.inputContainer input[type='text'] {
+	flex: 1;
+	padding: 10px;
+	font-size: 16px;
+	border: 2px solid #cccccc;
+	border-radius: 3px;
+	outline: none; /* Убираем стандартный outline */
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.inputContainer button {
+	background-color: #000000;
+	color: #ffffff;
+	padding: 10px;
+	border: none;
+	border-radius: 3px;
+	cursor: pointer;
+	font-size: 16px;
+	margin-left: 10px; /* Отступ слева от input */
+}
+
+.inputContainer button:disabled {
+	background-color: #333333;
+	cursor: not-allowed;
+}
+
+.taskContainer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.buttonContainer {
+	display: flex;
+	gap: 5px;
+}
+
+.buttonContainer button {
+	flex: 1;
+	padding: 5px 10px;
+	border: none;
+	border-radius: 3px;
+	background-color: grey;
+	color: #ffffff;
+	cursor: pointer;
+}
+
+.buttonContainer button:hover {
+	background-color: #000000;
+}
+
+.sortButton {
+	background-color: #000000;
+	color: #ffffff;
+	padding: 5px;
+	margin-bottom: 5px;
+	border: none;
+	border-radius: 3px;
+	cursor: pointer;
+	font-size: 8px;
+}
+
+.sortButton:hover {
+	background-color: #333333;
+}
+
+.inputSearch {
+	padding: 5px;
+	margin-bottom: 10px;
+	font-size: 16px;
+	border: 2px solid #cccccc;
+	border-radius: 3px;
+	outline: none; /* Убираем стандартный outline */
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+	width: 150px; /* Пример ширины поля */
+}
