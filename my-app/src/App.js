@@ -1,6 +1,6 @@
 import styles from './app.module.css';
-import { useSearch } from './hooks/useSearch';
 import { useTasks } from './hooks/useTasks';
+import { useState } from 'react';
 
 export const App = () => {
 	const {
@@ -8,14 +8,26 @@ export const App = () => {
 		newTask,
 		setNewTask,
 		editingTask,
+		handleEditClick,
 		setEditingTask,
 		handleAddTask,
-		handleEditClick,
 		handleEditTask,
 		handleDeleteTask,
 		handleSortTask,
 	} = useTasks();
-	const { searchTerm, searchResults, handleChange } = useSearch(tasks);
+
+	const [searchTerm, setSearchTerm] = useState(''); // что ищем
+
+	const searchResults = {};
+	Object.keys(tasks).forEach((taskId) => {
+		if (tasks[taskId].title.toLowerCase().includes(searchTerm.toLowerCase())) {
+			searchResults[taskId] = tasks[taskId];
+		}
+	});
+
+	const handleChange = (event) => {
+		setSearchTerm(event.target.value);
+	};
 
 	return (
 		<div className={styles.todoContainer}>
@@ -33,7 +45,7 @@ export const App = () => {
 					placeholder="Введите задачу"
 					value={newTask}
 					onChange={(e) => setNewTask(e.target.value)}
-				></input>
+				/>
 				<button
 					type="button"
 					onClick={handleAddTask}
@@ -46,22 +58,30 @@ export const App = () => {
 				А Я
 			</button>
 			<ul className={styles.todoList}>
-				{searchResults.map((task) => (
-					<li key={task.id}>
-						{editingTask.id === task.id ? (
+				{Object.keys(searchResults).map((taskId) => (
+					<li key={taskId}>
+						{editingTask.id === taskId ? (
 							<div className={styles.taskContainer}>
 								<input
 									type="text"
 									value={editingTask.title}
-									onChange={(e) =>
-										setEditingTask({
-											...editingTask,
-											title: e.target.value,
-										})
+									onChange={
+										(e) =>
+											setEditingTask({
+												...editingTask,
+												title: e.target.value,
+											}) // обновляет состояние editingTask при каждом изменении input
 									}
 								/>
 								<div className={styles.buttonContainer}>
-									<button onClick={handleEditTask}>Сохранить</button>
+									<button
+										onClick={
+											() =>
+												handleEditTask(taskId, editingTask.title) // обновить сотояние editingTask?
+										}
+									>
+										Сохранить
+									</button>
 									<button
 										onClick={() =>
 											setEditingTask({
@@ -76,16 +96,16 @@ export const App = () => {
 							</div>
 						) : (
 							<div className={styles.taskContainer}>
-								<span>{task.title}</span>
+								<span>{tasks[taskId].title}</span>
 								<div className={styles.buttonContainer}>
 									<button
 										onClick={() =>
-											handleEditClick(task.id, task.title)
+											handleEditClick(taskId, tasks[taskId].title)
 										}
 									>
 										Изменить
 									</button>
-									<button onClick={() => handleDeleteTask(task.id)}>
+									<button onClick={() => handleDeleteTask(taskId)}>
 										Удалить
 									</button>
 								</div>

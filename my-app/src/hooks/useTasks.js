@@ -1,53 +1,71 @@
 import { useState, useEffect } from 'react';
-import { fetchTasks, addTask, removeTask, editTask } from '../api';
+import { ref, onValue, push, remove, update } from 'firebase/database';
+import { db } from '../firebase';
+
+const taskDbref = ref(db, 'tasks');
 
 export const useTasks = () => {
-	const [tasks, setTasks] = useState([]);
+	const [tasks, setTasks] = useState({});
 	const [newTask, setNewTask] = useState('');
 	const [editingTask, setEditingTask] = useState({ id: null, title: '' });
 
 	useEffect(() => {
-		fetchTasks().then((loadedTasks) => {
+		return onValue(taskDbref, (snapshot) => {
+			const loadedTasks = snapshot.val() || {};
 			setTasks(loadedTasks);
 		});
 	}, []);
 
 	const handleAddTask = () => {
-		addTask(newTask).then((addedTask) => {
-			setTasks((prevTasks) => [...prevTasks, addedTask]);
-			setNewTask(''); // Сбросить поле ввода после добавления задачи
-		});
+		push(taskDbref, { title: newTask })
+			.then((addedTask) => {
+				setNewTask(''); // Сбросить поле ввода после добавления задачи
+			})
+			.catch((error) => {
+				console.error('Ошибка при добавлении задачи:', error);
+			});
 	};
+
 	const handleEditClick = (taskId, taskTitle) => {
 		setEditingTask({ id: taskId, title: taskTitle });
+	}; // исправить формат
+
+	const handleEditTask = (taskId, newTitle) => {
+		const taskRef = ref(db, `tasks/${taskId}`);
+		update(taskRef, { title: newTitle })
+			.then(() => {
+				setEditingTask({ id: null, title: '' }); // Сбрасываем editingTask после обновления
+			})
+			.catch((error) => {
+				console.error('Ошибка при изменении задачи:', error);
+			});
 	};
 
-	const handleEditTask = () => {
-		editTask(editingTask).then((changedTask) => {
-			setTasks(
-				tasks.map((task) => (task.id === editingTask.id ? changedTask : task)),
-			);
-			setEditingTask({ id: null, title: '' });
-		});
-	};
 	const handleDeleteTask = (taskId) => {
-		removeTask(taskId).then((removedTask) => {
-			console.log('Задача удалена', removedTask);
-			setTasks(tasks.filter((task) => task.id !== taskId));
-			setNewTask('');
-		});
+		console.log(taskId); // Выводим текущее значение taskId в консоль
+		const taskRef = ref(db, `tasks/${taskId}`);
+		remove(taskRef)
+			.then(() => {
+				console.log('Задача успешно удалена');
+			})
+			.catch((error) => {
+				console.error('Ошибка при удалении задачи:', error);
+			});
 	};
 	const handleSortTask = () => {
-		const sortedTasks = [...tasks];
+		const taskIds = Object.keys(tasks);
 
-		sortedTasks.sort((a, b) => {
-			if (a.title < b.title) {
-				return -1;
-			}
-			if (a.title > b.title) {
-				return 1;
-			}
+		taskIds.sort((a, b) => {
+			const taskA = tasks[a].title.toLowerCase();
+			const taskB = tasks[b].title.toLowerCase();
+			if (taskA < taskB) return -1;
+			if (taskA > taskB) return 1;
 			return 0;
+		});
+
+		const sortedTasks = {};
+		taskIds.forEach((taskId) => {
+			sortedTasks[taskId] = tasks[taskId];
 		});
 
 		setTasks(sortedTasks);
