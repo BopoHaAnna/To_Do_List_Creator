@@ -53,6 +53,9 @@
 	border-bottom: 2px dotted grey; /* Заменяем рамку на точечное подчеркивание */
 }
 
+.todoList li span {
+	word-break: break-all;
+}
 .inputContainer {
 	width: 500px;
 	display: flex; /* Используем flexbox для удобного расположения элементов */
@@ -93,6 +96,17 @@
 	justify-content: space-between;
 	align-items: center;
 }
+.taskContainer input[type='text'] {
+	flex: 1;
+	padding: 10px;
+	font-size: 16px;
+	border: none; /* Убираем стандартную рамку */
+	outline: none; /* Убираем стандартный outline */
+	background-color: #f9f9f9; /* Фоновый цвет */
+	color: #666666; /* Серый цвет текста */
+	border-radius: 3px; /* Закругленные углы */
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Тень для эффекта поднятия */
+}
 
 .buttonContainer {
 	display: flex;
@@ -114,7 +128,7 @@
 }
 
 .sortButton {
-	background-color: #000000;
+	background-color: grey;
 	color: #ffffff;
 	padding: 5px;
 	margin-bottom: 5px;
@@ -127,7 +141,9 @@
 .sortButton:hover {
 	background-color: #333333;
 }
-
+.sortButton.sortActive {
+	background-color: #000000; /* Черный цвет при активном состоянии (sortMode=true) */
+}
 .inputSearch {
 	padding: 5px;
 	margin-bottom: 10px;

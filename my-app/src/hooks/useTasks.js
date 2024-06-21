@@ -8,6 +8,7 @@ export const useTasks = () => {
 	const [tasks, setTasks] = useState({});
 	const [newTask, setNewTask] = useState('');
 	const [editingTask, setEditingTask] = useState({ id: null, title: '' });
+	const [sortMode, setSortMode] = useState(false); // Состояние для режима сортировки
 
 	useEffect(() => {
 		return onValue(taskDbref, (snapshot) => {
@@ -28,7 +29,7 @@ export const useTasks = () => {
 
 	const handleEditClick = (taskId, taskTitle) => {
 		setEditingTask({ id: taskId, title: taskTitle });
-	}; // исправить формат
+	};
 
 	const handleEditTask = (taskId, newTitle) => {
 		const taskRef = ref(db, `tasks/${taskId}`);
@@ -52,26 +53,32 @@ export const useTasks = () => {
 				console.error('Ошибка при удалении задачи:', error);
 			});
 	};
+
 	const handleSortTask = () => {
+		setSortMode(!sortMode); // Переключаем режим сортировки
+	};
+
+	const getSortedTasks = () => {
 		const taskIds = Object.keys(tasks);
-
-		taskIds.sort((a, b) => {
-			const taskA = tasks[a].title.toLowerCase();
-			const taskB = tasks[b].title.toLowerCase();
-			if (taskA < taskB) return -1;
-			if (taskA > taskB) return 1;
-			return 0;
-		});
-
+		if (sortMode) {
+			// Сортировка по алфавиту
+			taskIds.sort((a, b) => {
+				const taskA = tasks[a].title.toLowerCase();
+				const taskB = tasks[b].title.toLowerCase();
+				if (taskA < taskB) return -1;
+				if (taskA > taskB) return 1;
+				return 0;
+			});
+		}
 		const sortedTasks = {};
 		taskIds.forEach((taskId) => {
 			sortedTasks[taskId] = tasks[taskId];
 		});
-
-		setTasks(sortedTasks);
+		return sortedTasks;
 	};
+
 	return {
-		tasks,
+		tasks: sortMode ? getSortedTasks() : tasks,
 		newTask,
 		setNewTask,
 		editingTask,
@@ -81,5 +88,6 @@ export const useTasks = () => {
 		handleEditTask,
 		handleDeleteTask,
 		handleSortTask,
+		sortMode,
 	};
 };

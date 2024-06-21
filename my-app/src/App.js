@@ -1,6 +1,6 @@
 import styles from './app.module.css';
 import { useTasks } from './hooks/useTasks';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export const App = () => {
 	const {
@@ -14,6 +14,7 @@ export const App = () => {
 		handleEditTask,
 		handleDeleteTask,
 		handleSortTask,
+		sortMode,
 	} = useTasks();
 
 	const [searchTerm, setSearchTerm] = useState(''); // что ищем
@@ -28,6 +29,14 @@ export const App = () => {
 	const handleChange = (event) => {
 		setSearchTerm(event.target.value);
 	};
+
+	const inputRef = useRef(null);
+
+	useEffect(() => {
+		if (editingTask.id !== null && inputRef.current) {
+			inputRef.current.focus();
+		}
+	}, [editingTask.id, inputRef]);
 
 	return (
 		<div className={styles.todoContainer}>
@@ -54,7 +63,11 @@ export const App = () => {
 					Добавить
 				</button>
 			</div>
-			<button type="button" className={styles.sortButton} onClick={handleSortTask}>
+			<button
+				type="button"
+				className={`${styles.sortButton} ${sortMode ? styles.sortActive : ''}`}
+				onClick={handleSortTask}
+			>
 				А Я
 			</button>
 			<ul className={styles.todoList}>
@@ -64,6 +77,7 @@ export const App = () => {
 							<div className={styles.taskContainer}>
 								<input
 									type="text"
+									ref={inputRef}
 									value={editingTask.title}
 									onChange={
 										(e) =>

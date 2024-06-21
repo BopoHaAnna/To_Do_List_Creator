@@ -5,10 +5,10 @@ body {
 	margin: 0;
 	padding: 0;
 	height: 100vh;
-	background-image: url('https://images.unsplash.com/photo-1495195129352-aeb325a55b65?q=80&w=2676&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+	background-image: url('https://images.unsplash.com/photo-1603666857955-f634e8b5d2bd?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
 	background-size: cover; /* Увеличивает изображение, чтобы оно заполнило весь экран */
 	background-position: center; /* Центрирует изображение */
-	background-repeat: no-repeat; /* Запрещает повторение изображения */
+	background-repeat: repeat; /* Запрещает повторение изображения */
 	font-family: 'Open Sans', sans-serif;
 	display: flex;
 	justify-content: center; /* Центрирует по горизонтали */
